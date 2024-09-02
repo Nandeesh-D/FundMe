@@ -1,66 +1,44 @@
-## Foundry
+# FundMe
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+**FundMe** is a decentralized crowdfunding smart contract on the Ethereum blockchain. It allows users to contribute Ether (ETH) to support various projects or causes, ensuring that only the contract owner can withdraw the collected funds.
 
-Foundry consists of:
+## Features
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+### 1. Fundraising
+- Users can contribute ETH to the contract using the `fund()` function.
+- Minimum contribution is set to **$5 USD** (converted to ETH using Chainlink's price feed).
 
-## Documentation
+### 2. Price Conversion
+- Uses Chainlink's price feed oracle to convert ETH to USD.
+- Ensures accurate minimum contributions based on real-time price data.
 
-https://book.getfoundry.sh/
+### 3. Withdrawals
+- Only the contract owner can withdraw the collected funds.
+- The contract resets contributors' balances and clears the list of funders after withdrawal.
 
-## Usage
+### 4. Owner Verification
+- The contract has a modifier `onlyOwner` to restrict certain functions (like `withdraw()`) to the contract owner.
 
-### Build
+### 5. Automatic Funding
+- The contract includes `receive()` and `fallback()` functions to handle direct ETH transfers.
 
-```shell
-$ forge build
-```
+## Smart Contract Functions
 
-### Test
+- **fund()**: Allows users to contribute ETH, requiring a minimum of $5 USD.
+- **withdraw()**: Allows the owner to withdraw all funds and reset funders' contributions.
+- **getAmountFunded(address funder)**: Returns the amount of ETH funded by a specific address.
+- **getFunder(uint256 index)**: Returns the address of a funder based on the index.
+- **getOwner()**: Returns the address of the contract owner.
+- **getPriceFeed()**: Returns the address of the Chainlink price feed oracle.
 
-```shell
-$ forge test
-```
+## Testing and Deployment
 
-### Format
+- The project includes testing and deployment using [Foundry]
+- Ensure that the required environment variables and dependencies are correctly set up before running tests or deploying the contract.
 
-```shell
-$ forge fmt
-```
+## Setup
 
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+### Prerequisites
+- Solidity `^0.8.19`
+- Chainlink price feed for ETH/USD
+- Foundry for testing and deployment
